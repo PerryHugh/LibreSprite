@@ -1,27 +1,58 @@
 language: cpp
-
-compiler:
-  - clang
-  - gcc
+compiler: gcc
+matrix:
+    include:
+          - name: "LibreSprite Linux"
+            os: linux
+            sudo: required
+            addons:
+                apt:
+                    sources:
+                        - ubuntu-toolchain-r-test
+                    packages:
+                        - g++-4.8
+                        - cmake
+                        - ninja-build
+                        - ccache
+                        - libx11-dev
+                        - libxcursor-dev
+          - name: "LibreSprite OSX"
+            os: osx
+            osx_image: xcode7.3
+            addons:
+                apt:
+                    homebrew:
+                        packages:
+                        - cmake
+                        - ninja
+                        - ccache
 
 env:
-  matrix:
-    - SHARED=OFF
-    - SHARED=ON
+  - SHARED=OFF
 
 before_install:
-  - sudo add-apt-repository -y ppa:ubuntu-toolchain-r/test
-  - sudo apt-get update -qq
   - if [ "$SHARED" == "ON" ]; then sudo apt-get install -y libcurl4-openssl-dev libgif-dev libfreetype6-dev libjpeg-dev libz-dev libpng-dev libtinyxml-dev libpixman-1-dev liballegro4.2-dev ; fi
-  - sudo apt-get install -y -qq g++-4.8
-  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
 
 before_script:
   - mkdir build
   - cd build
-  - cmake .. -DUSE_SHARED_CURL=$SHARED -DUSE_SHARED_GIFLIB=$SHARED -DUSE_SHARED_FREETYPE=$SHARED -DUSE_SHARED_JPEGLIB=$SHARED -DUSE_SHARED_ZLIB=$SHARED -DUSE_SHARED_LIBPNG=$SHARED -DUSE_SHARED_TINYXML=$SHARED -DUSE_SHARED_PIXMAN=$SHARED -DUSE_SHARED_ALLEGRO4=$SHARED -DENABLE_TESTS=ON
-
+  - |
+    if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+        mkdir deps;
+        cd deps;
+        git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git;
+        git clone -b aseprite-m53 https://github.com/aseprite/skia.git
+        export PATH="$TRAVIS_BUILD_DIR/build/deps/depot_tools:$PATH";
+        cd skia;
+        python bin/sync-and-gyp;
+        ninja -C out/Release dm;
+        cd ../../;
+        cmake -G Ninja .. -DCMAKE_OSX_ARCHITECTURES=x86_64 -DCMAKE_OSX_DEPLOYMENT_TARGET=10.7 -DSKIA_DIR=/deps/skia -DWITH_HarfBuzz=OFF;
+     else
+         cmake -G Ninja .. -DUSE_SHARED_CURL=$SHARED -DUSE_SHARED_GIFLIB=$SHARED -DUSE_SHARED_FREETYPE=$SHARED -DUSE_SHARED_JPEGLIB=$SHARED -DUSE_SHARED_ZLIB=$SHARED -DUSE_SHARED_LIBPNG=$SHARED -DUSE_SHARED_TINYXML=$SHARED -DUSE_SHARED_PIXMAN=$SHARED -DUSE_SHARED_ALLEGRO4=$SHARED -DENABLE_TESTS=ON
+      fi
 script:
-  - "make"
-  - "ctest --output-on-failure"
-
+  - ninja libresprite
+  - cd "${TRAVIS_BUILD_DIR}"
+  - ccache -s
