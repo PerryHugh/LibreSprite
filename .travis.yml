@@ -12,6 +12,12 @@ addons:
             - ccache
             - libx11-dev
             - libxcursor-dev
+    homebrew:
+        packages:
+            - g++-4.8
+            - cmake
+            - ninja
+            - ccache
 
 matrix:
   include:
