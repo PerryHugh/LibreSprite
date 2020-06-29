@@ -32,5 +32,4 @@ script:
   - ninja libresprite
   - cd "${TRAVIS_BUILD_DIR}"
   - ccache -s
-  - ls
-  - ls /bin
+  - ls build/bin
