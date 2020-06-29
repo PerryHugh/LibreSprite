@@ -38,7 +38,7 @@ before_script:
         cd deps;
         git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git;
         git clone https://github.com/aseprite/skia.git;
-        export PATH="${PWD}/depot_tools:${PATH}";
+        export PATH="$TRAVIS_BUILD_DIR/build/deps/depot_tools:${PATH}";
         cd skia;
         git checkout aseprite-m53;
         python bin/sync-and-gyp;
