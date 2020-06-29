@@ -12,21 +12,22 @@ addons:
             - ccache
             - libx11-dev
             - libxcursor-dev
-    homebrew:
-        packages:
-            - g++-4.8
-            - cmake
-            - ninja
-            - ccache
-
 matrix:
-  include:
-    - name: "LibreSprite Linux"
-      os: linux
-      sudo: required
-    - name: "LibreSprite OSX"
-      os: osx
-      osx_image: xcode7.3
+    include:
+          - name: "LibreSprite Linux"
+            os: linux
+            sudo: required
+          - name: "LibreSprite OSX"
+            os: osx
+            osx_image: xcode7.3
+            addons:
+                apt:
+                    homebrew:
+                        packages:
+                        - g++-4.8
+                        - cmake
+                        - ninja
+                        - ccache
 
 env:
   - SHARED=OFF
@@ -44,7 +45,7 @@ before_script:
         cd deps;
         git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git;
         git clone -b aseprite-m53 https://github.com/aseprite/skia.git
-        export PATH="$TRAVIS_BUILD_DIR/build/deps/depot_tools:/usr/bin";
+        export PATH="$TRAVIS_BUILD_DIR/build/deps/depot_tools:$PATH";
         cd skia;
         python bin/sync-and-gyp;
         ninja -C out/Release dm;
