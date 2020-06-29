@@ -1,17 +1,7 @@
 language: cpp
 cache: ccache
-
 addons:
     apt:
-
-matrix:
-  include:
-    - name: "LibreSprite Linux"
-      os: linux
-      compiler: gcc
-      sudo: required
-      addons:
-        apt:
         sources:
             - ubuntu-toolchain-r-test
         packages:
@@ -21,6 +11,13 @@ matrix:
             - ccache
             - libx11-dev
             - libxcursor-dev
+
+matrix:
+  include:
+    - name: "LibreSprite Linux"
+      os: linux
+      compiler: gcc
+      sudo: required
     - name: "LibreSprite OSX"
       os: osx
       osx_image: xcode7.3
