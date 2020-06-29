@@ -31,7 +31,7 @@ matrix:
 
 env:
   - SHARED=OFF
-  - STOREPATH=$PATH
+  - STOREPATH="$PATH"
 
 before_install:
   - if [ "$SHARED" == "ON" ]; then sudo apt-get install -y libcurl4-openssl-dev libgif-dev libfreetype6-dev libjpeg-dev libz-dev libpng-dev libtinyxml-dev libpixman-1-dev liballegro4.2-dev ; fi
