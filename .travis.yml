@@ -18,14 +18,12 @@ matrix:
                         - libxcursor-dev
           - name: "LibreSprite OSX"
             os: osx
-            osx_image: xcode8.3
             addons:
-                apt:
-                    homebrew:
-                        packages:
-                        - cmake
-                        - ninja
-                        - ccache
+                homebrew:
+                    packages:
+                    - cmake
+                    - ninja
+                    - ccache
 
 env:
   - SHARED=OFF
