@@ -1,30 +1,21 @@
 language: cpp
 compiler: gcc
-jobs:
-    include:
-          - name: "LibreSprite Linux"
-            os: linux
-            dist: bionic
-            addons:
-                apt:
-                    sources:
-                        - ubuntu-toolchain-r-test
-                    packages:
-                        - g++-4.8
-                        - cmake
-                        - ninja-build
-                        - ccache
-                        - libx11-dev
-                        - libxcursor-dev
-          - name: "LibreSprite OSX"
-            os: osx
-            osx_image: xcode10.2
-            addons:
-                homebrew:
-                    packages:
-                    - cmake
-                    - ninja
-                    - ccache
+cache: ccache
+name: "LibreSprite Linux"
+os: linux
+dist: bionic
+
+addons:
+    apt:
+        sources:
+            - ubuntu-toolchain-r-test
+        packages:
+            - g++-4.8
+            - cmake
+            - ninja-build
+            - ccache
+            - libx11-dev
+            - libxcursor-dev
 
 env:
   - SHARED=OFF
@@ -36,23 +27,10 @@ before_install:
 before_script:
   - mkdir build
   - cd build
-  - |
-    if [ "$TRAVIS_OS_NAME" = "osx" ]; then
-        mkdir deps;
-        cd deps;
-        git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git;
-        git clone -b aseprite-m81 https://github.com/aseprite/skia.git
-        export PATH="$TRAVIS_BUILD_DIR/build/deps/depot_tools:$PATH";
-        cd skia;
-        python tools/git-sync-deps;
-        gn gen out/Release-x64 --args="is_debug=false is_official_build=true skia_use_system_expat=false skia_use_system_icu=false skia_use_system_libjpeg_turbo=false skia_use_system_libpng=false skia_use_system_libwebp=false skia_use_system_zlib=false skia_use_sfntly=false skia_use_freetype=true skia_use_harfbuzz=true skia_pdf_subset_harfbuzz=true skia_use_system_freetype2=false skia_use_system_harfbuzz=false target_cpu=\"x64\" extra_cflags=[\"-stdlib=libc++\", \"-mmacosx-version-min=10.9\"] extra_cflags_cc=[\"-frtti\"]"
-        ninja -C out/Release-x64 skia modules;
-        cd ../../;
-        cmake -G Ninja .. -DCMAKE_OSX_ARCHITECTURES=x86_64 -DCMAKE_OSX_DEPLOYMENT_TARGET=10.7 -DSKIA_DIR=/deps/skia -DWITH_HarfBuzz=OFF;
-     else
-         cmake -G Ninja .. -DUSE_SHARED_CURL=$SHARED -DUSE_SHARED_GIFLIB=$SHARED -DUSE_SHARED_FREETYPE=$SHARED -DUSE_SHARED_JPEGLIB=$SHARED -DUSE_SHARED_ZLIB=$SHARED -DUSE_SHARED_LIBPNG=$SHARED -DUSE_SHARED_TINYXML=$SHARED -DUSE_SHARED_PIXMAN=$SHARED -DUSE_SHARED_ALLEGRO4=$SHARED -DENABLE_TESTS=ON
-      fi
+  - cmake -G Ninja .. -DUSE_SHARED_CURL=$SHARED -DUSE_SHARED_GIFLIB=$SHARED -DUSE_SHARED_FREETYPE=$SHARED -DUSE_SHARED_JPEGLIB=$SHARED -DUSE_SHARED_ZLIB=$SHARED -DUSE_SHARED_LIBPNG=$SHARED -DUSE_SHARED_TINYXML=$SHARED -DUSE_SHARED_PIXMAN=$SHARED -DUSE_SHARED_ALLEGRO4=$SHARED -DENABLE_TESTS=ON
 script:
   - ninja libresprite
   - cd "${TRAVIS_BUILD_DIR}"
   - ccache -s
+  - ls
+  - ls /bin
