@@ -37,7 +37,8 @@ before_install:
 before_script:
   - mkdir build
   - cd build
-  - 'if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+  - |
+    'if [ "$TRAVIS_OS_NAME" = "osx" ]; then
         mkdir deps;
         cd deps;
         git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git;
