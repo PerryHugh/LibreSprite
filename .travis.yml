@@ -33,7 +33,7 @@ env:
 
 before_install:
   - if [ "$SHARED" == "ON" ]; then sudo apt-get install -y libcurl4-openssl-dev libgif-dev libfreetype6-dev libjpeg-dev libz-dev libpng-dev libtinyxml-dev libpixman-1-dev liballegro4.2-dev ; fi
-  - if [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
+  - if [ "${TRAVIS_OS_NAME}" = "linux" ] && [ "$CXX" = "g++" ]; then export CXX="g++-4.8"; fi
 
 before_script:
   - mkdir build
@@ -43,10 +43,9 @@ before_script:
         mkdir deps;
         cd deps;
         git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git;
-        git clone https://github.com/aseprite/skia.git;
-        export PATH="$TRAVIS_BUILD_DIR/build/deps/depot_tools:${PATH}";
+        git clone -b aseprite-m53 https://github.com/aseprite/skia.git
+        export PATH="$TRAVIS_BUILD_DIR/build/deps/depot_tools:/usr/bin";
         cd skia;
-        git checkout aseprite-m53;
         python bin/sync-and-gyp;
         ninja -C out/Release dm;
         cd ../../;
