@@ -3,11 +3,6 @@ cache: ccache
 
 addons:
     apt:
-        sources:
-            - ubuntu-toolchain-r-test
-        packages:
-            - g++-4.8
-            - cmake
 
 matrix:
   include:
@@ -17,7 +12,11 @@ matrix:
       sudo: required
       addons:
         apt:
-          packages:
+        sources:
+            - ubuntu-toolchain-r-test
+        packages:
+            - g++-4.8
+            - cmake
             - ninja-build
             - ccache
             - libx11-dev
