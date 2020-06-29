@@ -36,10 +36,11 @@ before_install:
 
 before_script:
   - mkdir build
-  - cd build
-  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+  - cd ./build
+  - |
+    if [ "$TRAVIS_OS_NAME" = "osx" ]; then
         mkdir deps;
-        cd deps;
+        cd ./deps;
         git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git;
         git clone https://github.com/aseprite/skia.git;
         export PATH="${PWD}/depot_tools:${PATH}";
@@ -50,7 +51,7 @@ before_script:
         cd ../../;
         cmake -G Ninja .. -DCMAKE_OSX_ARCHITECTURES=x86_64 -DCMAKE_OSX_DEPLOYMENT_TARGET=10.7 -DSKIA_DIR=/deps/skia -DWITH_HarfBuzz=OFF;
      else
-         cmake -G Ninja .. -DUSE_SHARED_CURL=$SHARED -DUSE_SHARED_GIFLIB=$SHARED -DUSE_SHARED_FREETYPE=$SHARED -DUSE_SHARED_JPEGLIB=$SHARED -DUSE_SHARED_ZLIB=$SHARED -DUSE_SHARED_LIBPNG=$SHARED -DUSE_SHARED_TINYXML=$SHARED -DUSE_SHARED_PIXMAN=$SHARED -DUSE_SHARED_ALLEGRO4=$SHARED -DENABLE_TESTS=ON fi
+         cmake -G Ninja .. -DUSE_SHARED_CURL=$SHARED -DUSE_SHARED_GIFLIB=$SHARED -DUSE_SHARED_FREETYPE=$SHARED -DUSE_SHARED_JPEGLIB=$SHARED -DUSE_SHARED_ZLIB=$SHARED -DUSE_SHARED_LIBPNG=$SHARED -DUSE_SHARED_TINYXML=$SHARED -DUSE_SHARED_PIXMAN=$SHARED -DUSE_SHARED_ALLEGRO4=$SHARED -DENABLE_TESTS=ON
       fi
 script:
   - ninja libresprite
