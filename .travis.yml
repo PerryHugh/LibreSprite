@@ -37,8 +37,7 @@ before_install:
 before_script:
   - mkdir build
   - cd build
-  - |
-    'if [ "$TRAVIS_OS_NAME" = "osx" ]; then
+  - if [ "$TRAVIS_OS_NAME" = "osx" ]; then
         mkdir deps;
         cd deps;
         git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git;
@@ -49,13 +48,10 @@ before_script:
         python bin/sync-and-gyp;
         ninja -C out/Release dm;
         cd ../../;
-        cmake -G Ninja .. -DCMAKE_OSX_ARCHITECTURES=x86_64 \
-              -DCMAKE_OSX_DEPLOYMENT_TARGET=10.7 \
-              -DSKIA_DIR=/deps/skia \
-              -DWITH_HarfBuzz=OFF;
-      fi'
-  - if [ "$TRAVIS_OS_NAME" = "linux" ] then cmake -G Ninja .. -DUSE_SHARED_CURL=$SHARED -DUSE_SHARED_GIFLIB=$SHARED -DUSE_SHARED_FREETYPE=$SHARED -DUSE_SHARED_JPEGLIB=$SHARED -DUSE_SHARED_ZLIB=$SHARED -DUSE_SHARED_LIBPNG=$SHARED -DUSE_SHARED_TINYXML=$SHARED -DUSE_SHARED_PIXMAN=$SHARED -DUSE_SHARED_ALLEGRO4=$SHARED -DENABLE_TESTS=ON fi
-
+        cmake -G Ninja .. -DCMAKE_OSX_ARCHITECTURES=x86_64 -DCMAKE_OSX_DEPLOYMENT_TARGET=10.7 -DSKIA_DIR=/deps/skia -DWITH_HarfBuzz=OFF;
+     else
+         cmake -G Ninja .. -DUSE_SHARED_CURL=$SHARED -DUSE_SHARED_GIFLIB=$SHARED -DUSE_SHARED_FREETYPE=$SHARED -DUSE_SHARED_JPEGLIB=$SHARED -DUSE_SHARED_ZLIB=$SHARED -DUSE_SHARED_LIBPNG=$SHARED -DUSE_SHARED_TINYXML=$SHARED -DUSE_SHARED_PIXMAN=$SHARED -DUSE_SHARED_ALLEGRO4=$SHARED -DENABLE_TESTS=ON fi
+      fi
 script:
   - ninja libresprite
   - "ctest --output-on-failure"
