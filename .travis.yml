@@ -1,5 +1,6 @@
 language: cpp
 cache: ccache
+compiler: gcc
 addons:
     apt:
         sources:
@@ -16,12 +17,10 @@ matrix:
   include:
     - name: "LibreSprite Linux"
       os: linux
-      compiler: gcc
       sudo: required
     - name: "LibreSprite OSX"
       os: osx
       osx_image: xcode7.3
-      compiler: clang
 
 env:
   - SHARED=OFF
@@ -51,6 +50,5 @@ before_script:
       fi
 script:
   - ninja libresprite
-  - "ctest --output-on-failure"
   - cd "${TRAVIS_BUILD_DIR}"
   - ccache -s
