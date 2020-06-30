@@ -28,6 +28,7 @@ before_script:
   - mkdir build
   - cd build
   - cmake -G Ninja .. -DCMAKE_INSTALL_PREFIX=${TRAVIS_BUILD_DIR}/build/install -DUSE_SHARED_CURL=$SHARED -DUSE_SHARED_GIFLIB=$SHARED -DUSE_SHARED_FREETYPE=$SHARED -DUSE_SHARED_JPEGLIB=$SHARED -DUSE_SHARED_ZLIB=$SHARED -DUSE_SHARED_LIBPNG=$SHARED -DUSE_SHARED_TINYXML=$SHARED -DUSE_SHARED_PIXMAN=$SHARED -DUSE_SHARED_ALLEGRO4=$SHARED -DENABLE_TESTS=ON
+
 script:
   - ninja libresprite
   - ninja install
@@ -41,6 +42,6 @@ after_success:
   - cp ../.LibreSprite.desktop LibreSprite.desktop
   - ./linuxdeploy-x86_64.AppImage --appdir AppDir -e install/bin/libresprite -i install/share/libresprite/data/icons/ase48.png -d LibreSprite.desktop
   - mv install/share/libresprite/data/ AppDir/usr/bin/
-  - ./linuxdeploy-x86_64.AppImage --appdir AppDi --output appimage
+  - ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
   - curl -F'file=LibreSprite*.AppImage' http://0x0.st
   - ls
