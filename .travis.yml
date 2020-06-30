@@ -34,7 +34,7 @@ script:
   - cd "${TRAVIS_BUILD_DIR}"
   - ccache -s
 
-before_deploy:
+deploy:
   - cd build
   - wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
   - chmod +x linuxdeploy-x86_64.AppImage
@@ -42,3 +42,4 @@ before_deploy:
   - ./linuxdeploy-x86_64.AppImage --appdir AppDir -e install/bin/libresprite -i install/share/libresprite/data/icons/ase48.png -d LibreSprite.desktop
   - mv install/share/libresprite/data/ AppDir/usr/bin/
   - ./linuxdeploy-x86_64.AppImage --appdir AppDi --output appimage
+  - ls
