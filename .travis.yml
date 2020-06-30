@@ -36,24 +36,21 @@ script:
   - ccache -s
 
 after_success:
-  - |
-    if [ branch = master ] then
-        cd build;
-        wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage;
-        chmod +x linuxdeploy-x86_64.AppImage;
-        cp ../.LibreSprite.desktop LibreSprite.desktop;
-        ./linuxdeploy-x86_64.AppImage --appdir AppDir -e install/bin/libresprite -i install/share/libresprite/data/icons/ase48.png -d LibreSprite.desktop;
-        mv install/share/libresprite/data/ AppDir/usr/bin/;
-        ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage;
-        mkdir out;
-        mv LibreSprite-*.AppImage -t out;
-        ls -lh out/*;
-        wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh;
-        bash upload.sh out/*;
-    fi
+  - cd build
+  - wget https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+  - chmod +x linuxdeploy-x86_64.AppImage
+  - cp ../.LibreSprite.desktop LibreSprite.desktop
+  - ./linuxdeploy-x86_64.AppImage --appdir AppDir -e install/bin/libresprite -i install/share/libresprite/data/icons/ase48.png -d LibreSprite.desktop
+  - mv install/share/libresprite/data/ AppDir/usr/bin/
+  - ./linuxdeploy-x86_64.AppImage --appdir AppDir --output appimage
+  - mkdir out
+  - mv LibreSprite-*.AppImage -t out
+  - ls -lh out/*
+  - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+  - bash upload.sh out/*
 
 branches:
-  except:
-    - # Do not build tags that we create when we upload to GitHub Releases
-    - /^(?i:continuous.*)$/
+    except:
+      - # Do not build tags that we create when we upload to GitHub Releases
+      - /^(?i:continuous.*)$/
 
