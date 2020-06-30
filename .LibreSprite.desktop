@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=LibreSprite
+Comment=LibreSprite is a free and open source program for creating and animating your sprites.
+Exec=libresprite
+Icon=ase48
+Terminal=false
+Categories=Utility;Development;
+X-AppImage-Arch=x86_64
+X-AppImage-Name=LibreSprite
